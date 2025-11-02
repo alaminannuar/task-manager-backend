@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config(); // always load .env for local dev
+require(".env").config(); // always load .env for local dev
 
 const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/task");
