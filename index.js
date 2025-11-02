@@ -1,21 +1,23 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
-// Load .env only in local development
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
+require("dotenv").config(); // always load .env for local dev
 
 const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/task");
 
-// MongoDB connection URI from environment variables
-const mongoURI = process.env.MONGO_URI || "mongodb+srv://testuser1:jsDDkAbGKQMRK3kv@cluster0.cuig9xs.mongodb.net/?appName=Cluster0";
+// MongoDB connection URI
+const mongoURI = process.env.MONGO_URI;
+if (!mongoURI) {
+  console.error("Error: MONGO_URI is not defined in environment variables!");
+  process.exit(1);
+}
 
 // Connect to MongoDB
 mongoose.connect(mongoURI)
   .then(() => {
+    console.log("MongoDB connected successfully.");
+
     const app = express();
 
     // CORS settings
@@ -32,8 +34,11 @@ mongoose.connect(mongoURI)
     app.use("/auth", authRoutes);
     app.use("/tasks", taskRoutes);
 
-    // Use PORT from environment or fallback
+    // Start server
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`Task Manager API running on port ${PORT}`));
   })
-  .catch((err) => console.log("MongoDB connection error:", err));
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  });
