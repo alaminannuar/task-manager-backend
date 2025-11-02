@@ -15,8 +15,7 @@ const mongoURI =
   process.env.MONGO_URI ||
   "mongodb+srv://testuser1:jsDDkAbGKQMRK3kv@cluster0.cuig9xs.mongodb.net/?appName=Cluster0";
 const frontendURL =
-  process.env.FRONTEND_URL ||
-  "https://task-manager-frontend-jclr.onrender.com/";
+  process.env.FRONTEND_URL || "https://task-manager-frontend-jclr.onrender.com";
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
@@ -28,7 +27,7 @@ mongoose
     // CORS
     app.use(
       cors({
-        origin:"*",
+        origin: "*",
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         credentials: true,
       })
