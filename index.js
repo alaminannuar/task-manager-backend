@@ -30,7 +30,7 @@ mongoose
     // CORS
     app.use(
       cors({
-        origin: frontendURL, // allow only your frontend
+        origin: "https://task-manager-frontend-jclr.onrender.com",
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         credentials: true,
       })
