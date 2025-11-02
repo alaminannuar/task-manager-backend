@@ -1,4 +1,3 @@
-// index.js
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -16,7 +15,10 @@ const taskRoutes = require("./routes/task");
 const mongoURI =
   process.env.MONGO_URI ||
   "mongodb+srv://testuser1:jsDDkAbGKQMRK3kv@cluster0.cuig9xs.mongodb.net/taskdb?retryWrites=true&w=majority";
-const frontendURL = process.env.FRONTEND_URL || "http://localhost:5173";
+
+const frontendURL =
+  process.env.FRONTEND_URL || "https://task-manager-frontend-jclr.onrender.com";
+
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
@@ -27,10 +29,10 @@ mongoose
 
     const app = express();
 
-    // CORS
+    // CORS setup
     app.use(
       cors({
-        origin: "https://task-manager-frontend-jclr.onrender.com",
+        origin: frontendURL,
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         credentials: true,
       })
@@ -43,7 +45,12 @@ mongoose
     app.use("/auth", authRoutes);
     app.use("/tasks", taskRoutes);
 
-    // Global error handler (optional)
+    // 404 handler
+    app.use((req, res) => {
+      res.status(404).json({ message: "Route not found" });
+    });
+
+    // Global error handler
     app.use((err, req, res, next) => {
       console.error("Global error:", err);
       res.status(500).json({ message: "Internal server error" });
