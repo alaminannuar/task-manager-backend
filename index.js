@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-// Routes
+// Import Routes
 const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/task");
 
@@ -21,44 +21,47 @@ const frontendURL =
 
 const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB
+// Create app FIRST
+const app = express();
+
+// Middleware
+app.use(
+  cors({
+    origin: frontendURL,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+
+// Routes
+app.use("/auth", authRoutes);
+app.use("/tasks", taskRoutes);
+
+// Test root
+app.get("/", (req, res) => {
+  res.json({ message: "API is running!" });
+});
+
+// 404 handler (AFTER routes)
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("Global error:", err);
+  res.status(500).json({ message: "Internal server error" });
+});
+
+// Connect to MongoDB and start server
 mongoose
   .connect(mongoURI)
   .then(() => {
     console.log("MongoDB connected successfully");
-
-    const app = express();
-
-    // CORS setup
-    app.use(
-      cors({
-        origin: frontendURL,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        credentials: true,
-      })
+    app.listen(PORT, () =>
+      console.log(`Task Manager API running on port ${PORT}`)
     );
-
-    // Parse JSON requests
-    app.use(express.json());
-
-    // Routes
-    app.use("/auth", authRoutes);
-    app.use("/tasks", taskRoutes);
-
-    // 404 handler (moved inside)
-    app.use((req, res) => {
-      res.status(404).json({ message: "Route not found" });
-    });
-
-    // Global error handler
-    app.use((err, req, res, next) => {
-      console.error("Global error:", err);
-      res.status(500).json({ message: "Internal server error" });
-    });
-
-    // Start server
-    app.listen(PORT, () => {
-      console.log(`Task Manager API running on port ${PORT}`);
-    });
   })
   .catch((err) => console.error("MongoDB connection error:", err));
