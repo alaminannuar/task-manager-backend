@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-// Import Routes
+// Import routes
 const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/task");
 
@@ -21,7 +21,7 @@ const frontendURL =
 
 const PORT = process.env.PORT || 5000;
 
-// Create app FIRST
+// Initialize app first
 const app = express();
 
 // Middleware
@@ -39,12 +39,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/tasks", taskRoutes);
 
-// Test root
-app.get("/", (req, res) => {
-  res.json({ message: "API is running!" });
-});
-
-// 404 handler (AFTER routes)
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
@@ -59,9 +54,9 @@ app.use((err, req, res, next) => {
 mongoose
   .connect(mongoURI)
   .then(() => {
-    console.log("MongoDB connected successfully");
-    app.listen(PORT, () =>
-      console.log(`Task Manager API running on port ${PORT}`)
-    );
+    console.log("✅ MongoDB connected successfully");
+    app.listen(PORT, () => {
+      console.log(`🚀 Task Manager API running on port ${PORT}`);
+    });
   })
   .catch((err) => console.error("MongoDB connection error:", err));
