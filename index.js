@@ -45,6 +45,11 @@ mongoose
     app.use("/auth", authRoutes);
     app.use("/tasks", taskRoutes);
 
+    // 404 handler (moved inside)
+    app.use((req, res) => {
+      res.status(404).json({ message: "Route not found" });
+    });
+
     // Global error handler
     app.use((err, req, res, next) => {
       console.error("Global error:", err);
@@ -57,8 +62,3 @@ mongoose
     });
   })
   .catch((err) => console.error("MongoDB connection error:", err));
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
