@@ -13,9 +13,7 @@ const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/task");
 
 // Environment variables
-const mongoURI =
-  process.env.MONGO_URI ||
-  "mongodb+srv://testuser1:jsDDkAbGKQMRK3kv@cluster0.cuig9xs.mongodb.net/?appName=Cluster0";
+const mongoURI = process.env.MONGO_URI;
 
 const PORT = process.env.PORT || 5000;
 
