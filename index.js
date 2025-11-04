@@ -21,6 +21,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   "https://task-manager-frontend-jclr.onrender.com",
   "http://localhost:5175",
+  "https://task-manager-frontend-one-theta.vercel.app",
 ];
 // Initialize app
 const app = express();
