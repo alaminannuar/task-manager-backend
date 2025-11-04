@@ -20,9 +20,8 @@ const PORT = process.env.PORT || 5000;
 // Frontend URLs (Render + Localhost)
 const allowedOrigins = [
   "https://task-manager-frontend-jclr.onrender.com",
-  "http://localhost:5173",
+  "http://localhost:5175",
 ];
-
 // Initialize app
 const app = express();
 
